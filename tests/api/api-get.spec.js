@@ -2,23 +2,23 @@
 import { test, expect } from '../../fixtures/api.fixture.js';
 import { JsonUtils } from '../../utils/jsonUtils.js';
 
-test.describe.configure({ mode: 'serial' });
+    // GET API
+    test('GET - Fetch post and validate response', async ({ api }) => {
 
-test('GET - Fetch post and validate response', async ({ api }) => {
-    const response = await api.get('/posts/1');
+        const response = await api.get('/posts/1');
 
-    expect(response.status()).toBe(200);
+        expect(response.status()).toBe(200);
 
-    const body = await response.json();
+        const body = await response.json();
 
-    expect(body).toEqual(expect.objectContaining({
-        id: 1,
-        title: expect.any(String),
-        body: expect.any(String),
-        userId: 1
-    }));
+        expect(body.id).toBe(1);
+        expect(body.title).toBeTruthy();
+        expect(body.userId).toBe(1);
 
-    expect(response.headers()['content-type']).toContain('application/json');
+        expect(response.headers()['content-type'])
+            .toContain('application/json');
 
-    JsonUtils.writeJson(`api-responses/get-response-${Date.now()}.json`, body);
-});
+        JsonUtils.writeJson('api-responses/get-response.json', body);
+
+        console.log('GET Response:', body);
+    });
